@@ -6,8 +6,8 @@ numpy
 pandas
 joblib
 
-azureml.automl.core
-azureml.automl.core.shared
+azureml.core
+azureml.core.shared
 logging_utilities
 log_server
 azureml.telemetry
