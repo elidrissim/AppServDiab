@@ -24,9 +24,5 @@ st.sidebar.slider("Diabetes Pedigree Function", 0.00, 10.00, 0.01)
 st.sidebar.slider("Age", 0, 120)
 
 
-
-def show_results():
-    st.subheader("User Input parameters")
-    st.write("Outcome")
-
-show_results()
+st.subheader("User Input parameters")
+st.write("Outcome")
