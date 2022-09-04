@@ -9,9 +9,6 @@ import pickle
 import json
 import logging
 import os
-import pickle
-import numpy as np
-import pandas as pd
 import joblib
 
 import azureml.core
@@ -28,7 +25,7 @@ st.image("http://www.ehtp.ac.ma/images/lo.png")
 
 st.markdown(f'<h1 style="color:#773723;text-align: center;font-size:48px;">{"Cloud Computing project"}</h1>', unsafe_allow_html=True)
 st.markdown(f'<h1 style="color:#da9954;text-align: center;font-size:36px;">{"Indian Diabetes Prediction App"}</h1>', unsafe_allow_html=True)
-st.markdown(f'<h1 style="color:#557caf;font-size:24px;">{"> realized by: Mustapha El Idrissi"}</h1>', unsafe_allow_html=True)
+st.markdown(f'<h1 style="color:#557caf;font-size:24px;">{"> Realized by: Mustapha El Idrissi"}</h1>', unsafe_allow_html=True)
 
 
 def user_input_features():
