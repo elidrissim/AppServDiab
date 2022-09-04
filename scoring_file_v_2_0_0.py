@@ -1,66 +1,55 @@
 # ---------------------------------------------------------
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # ---------------------------------------------------------
-import json
-import logging
-import os
-import pickle
-import numpy as np
+import streamlit as st
 import pandas as pd
-import joblib
-
-import azureml.core
-from azureml.core.shared import logging_utilities, log_server
-from azureml.telemetry import INSTRUMENTATION_KEY
-
-from inference_schema.schema_decorators import input_schema, output_schema
-from inference_schema.parameter_types.numpy_parameter_type import NumpyParameterType
-from inference_schema.parameter_types.pandas_parameter_type import PandasParameterType
-from inference_schema.parameter_types.standard_py_parameter_type import StandardPythonParameterType
-
-data_sample = PandasParameterType(pd.DataFrame({"Pregnancies": pd.Series([0], dtype="int8"), "Glucose": pd.Series([0], dtype="int16"), "BloodPressure": pd.Series([0], dtype="int8"), "SkinThickness": pd.Series([0], dtype="int8"), "Insulin": pd.Series([0], dtype="int16"), "BMI": pd.Series([0.0], dtype="float32"), "DiabetesPedigreeFunction": pd.Series([0.0], dtype="float32"), "Age": pd.Series([0], dtype="int8")}))
-input_sample = StandardPythonParameterType({'data': data_sample})
-method_sample = StandardPythonParameterType("predict")
-sample_global_params = StandardPythonParameterType({"method": method_sample})
-
-result_sample = NumpyParameterType(np.array([0]))
-output_sample = StandardPythonParameterType({'Results':result_sample})
-
-try:
-    log_server.enable_telemetry(INSTRUMENTATION_KEY)
-    log_server.set_verbosity('INFO')
-    logger = logging.getLogger('azureml.automl.core.scoring_script_v2')
-except:
-    pass
+import numpy as np
+import pickle
 
 
-def init():
-    global model
-    # This name is model.id of model that we want to deploy deserialize the model file back
-    # into a sklearn model
-    model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'model.pkl')
-    path = os.path.normpath(model_path)
-    path_split = path.split(os.sep)
-    log_server.update_custom_dimensions({'model_name': path_split[-3], 'model_version': path_split[-2]})
-    try:
-        logger.info("Loading model from path.")
-        model = joblib.load(model_path)
-        logger.info("Loading successful.")
-    except Exception as e:
-        logging_utilities.log_traceback(e, logger)
-        raise
+st.image("http://www.ehtp.ac.ma/images/lo.png")
 
-@input_schema('GlobalParameters', sample_global_params, convert_to_provided_type=False)
-@input_schema('Inputs', input_sample)
-@output_schema(output_sample)
-def run(Inputs, GlobalParameters={"method": "predict"}):
-    data = Inputs['data']
-    if GlobalParameters.get("method", None) == "predict_proba":
-        result = model.predict_proba(data)
-    elif GlobalParameters.get("method", None) == "predict":
-        result = model.predict(data)
-    else:
-        raise Exception(f"Invalid predict method argument received. GlobalParameters: {GlobalParameters}")
-    if isinstance(result, pd.DataFrame):
-        result = result.values
-    return {'Results':result.tolist()}
+st.markdown(f'<h1 style="color:#773723;text-align: center;font-size:48px;">{"Cloud Computing project"}</h1>', unsafe_allow_html=True)
+st.markdown(f'<h1 style="color:#da9954;text-align: center;font-size:36px;">{"Indian Diabetes Prediction App"}</h1>', unsafe_allow_html=True)
+st.markdown(f'<h1 style="color:#557caf;font-size:24px;">{"> realized by: Mustapha El Idrissi"}</h1>', unsafe_allow_html=True)
+
+
+def user_input_features():
+    Pregnancies = st.sidebar.slider("Pregnancies", 0, 25)
+    Glucose = st.sidebar.slider("Glucose", 0, 300)
+    BloodPressure = st.sidebar.slider("Glucose", 0, 150)
+    SkinThickness = st.sidebar.slider("Skin Thickness", 0, 100)
+    Insulin = st.sidebar.slider("Insulin", 0, 1000)
+    BMI = st.sidebar.slider("BMI", 0.0, 100.0, 0.1)
+    DiabetesPedigreeFunction = st.sidebar.slider("Diabetes Pedigree Function", 0.00, 10.00, 0.01)
+    Age = st.sidebar.slider("Age", 0, 120)
+
+
+    data = {"Pregnancies": Pregnancies,
+            "Glucose": Glucose,
+            "Blood Pressure": BloodPressure,
+            "Skin Thickness": SkinThickness,
+            "Insulin": Insulin,
+            "BMI": BMI,
+            "Diabetes Pedigree Function": DiabetesPedigreeFunction,
+            "Age": Age}
+
+    features = pd.DataFrame(data, index=[0])
+    return features
+
+def show_results():
+    st.subheader("User Input parameters")
+    st.write("Outcome")
+    model_Outcome = pickle.load(open("model.pkl", "rb"))
+    prediction = model_Outcome.predict(Outcome)
+    prediction_proba = model_Outcome.predict_proba(Outcome)
+    st.subheader("Class labels and their corresponding index number")
+    st.write(pd.DataFrame(model_Outcome.classes_))
+    st.subheader("Prediction")
+    st.write(prediction)
+    st.subheader("Prediction Probability")
+    st.write(prediction_proba)
+
+
+Outcome = user_input_features()
+show_results()
