@@ -51,5 +51,5 @@ def show_results():
     #st.write(prediction_proba)
 
 
-Outcome = user_input_features()
+#Outcome = user_input_features()
 show_results()
