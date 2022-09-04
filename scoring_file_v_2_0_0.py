@@ -6,20 +6,6 @@ import pandas as pd
 import numpy as np
 import pickle
 
-import json
-import logging
-import os
-import joblib
-
-import azureml.core
-from azureml.core.shared import logging_utilities, log_server
-from azureml.telemetry import INSTRUMENTATION_KEY
-
-from inference_schema.schema_decorators import input_schema, output_schema
-from inference_schema.parameter_types.numpy_parameter_type import NumpyParameterType
-from inference_schema.parameter_types.pandas_parameter_type import PandasParameterType
-from inference_schema.parameter_types.standard_py_parameter_type import StandardPythonParameterType
-
 
 st.image("http://www.ehtp.ac.ma/images/lo.png")
 
@@ -54,15 +40,15 @@ def user_input_features():
 def show_results():
     st.subheader("User Input parameters")
     st.write("Outcome")
-    model_Outcome = pickle.load(open("model.pkl", "rb"))
-    prediction = model_Outcome.predict(Outcome)
-    prediction_proba = model_Outcome.predict_proba(Outcome)
-    st.subheader("Class labels and their corresponding index number")
-    st.write(pd.DataFrame(model_Outcome.classes_))
-    st.subheader("Prediction")
-    st.write(prediction)
-    st.subheader("Prediction Probability")
-    st.write(prediction_proba)
+    #model_Outcome = pickle.load(open("model.pkl", "rb"))
+    #prediction = model_Outcome.predict(Outcome)
+    #prediction_proba = model_Outcome.predict_proba(Outcome)
+    #st.subheader("Class labels and their corresponding index number")
+    #st.write(pd.DataFrame(model_Outcome.classes_))
+    #st.subheader("Prediction")
+    #st.write(prediction)
+    #st.subheader("Prediction Probability")
+    #st.write(prediction_proba)
 
 
 Outcome = user_input_features()
